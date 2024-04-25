@@ -19,3 +19,8 @@ export default {
   components: { Header, Footer, addEditMovie },
 };
 </script>
+<style scoped>
+.mt-120 {
+  margin-top: 120px;
+}
+</style>

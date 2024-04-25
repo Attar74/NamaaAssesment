@@ -1,12 +1,21 @@
 <template>
   <div class="px-1">
-    <v-card flat class="mx-auto mt-5 cursor-pointer" max-width="344" @click="goToDetails">
+    <v-card
+      flat
+      class="mx-auto mt-5 cursor-pointer"
+      max-width="344"
+      @click="routeToDetails"
+    >
       <v-hover>
         <template v-slot:default="{ isHovering, props }">
           <v-img
-            :aspect-ratio="4/6"
+            :aspect-ratio="4 / 6"
             contain
-            :src="movie?.poster?.length ? movie.poster : 'https://i0.wp.com/rollingfilmfestival.com/wp-content/uploads/2021/01/no-poster-available.png?resize=1080%2C1526&ssl=1'"
+            :src="
+              movie?.poster?.length
+                ? movie.poster
+                : 'https://i0.wp.com/rollingfilmfestival.com/wp-content/uploads/2021/01/no-poster-available.png?resize=1080%2C1526&ssl=1'
+            "
             class="transition--all"
             v-bind="props"
             :class="isHovering ? 'scale-1' : ''"
@@ -41,16 +50,14 @@
           color="teal-accent-4"
           text="More Details"
           variant="text"
-          @click="goToDetails"
+          @click="routeToDetails"
         />
       </v-card-actions>
     </v-card>
-  </div @click="goToDetails">
+  </div>
 </template>
 
 <script>
-import { RouterLink } from 'vue-router';
-
 export default {
   name: 'movieCard',
   props: {
@@ -60,29 +67,10 @@ export default {
       },
     },
   },
-  data() {
-    return {
-      reveal: true,
-    };
-  },
   methods: {
-    goToDetails() {
-        this.$router.push(`/details/${this.movie.id}`)
-    }
-  }
+    routeToDetails() {
+      this.$router.push(`/details/${this.movie.id}`);
+    },
+  },
 };
 </script>
-
-<style>
-.scale-1 {
-  transform: scale(1.1);
-}
-
-.transition--all {
-  transition: all ease-in-out 0.5s;
-}
-
-.min-height-150 {
-  min-height: 150;
-}
-</style>

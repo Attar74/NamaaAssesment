@@ -29,9 +29,6 @@
 import { mapActions } from 'vuex';
 export default {
   name: 'appHeader',
-  data() {
-    return {};
-  },
   methods: {
     ...mapActions(['toggleModalStateDispatche']),
   },

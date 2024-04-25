@@ -318,7 +318,7 @@ export default {
       } catch {
       } finally {
         resetForm();
-        this.toggleModalStateDispatche({ val: false });
+        this.closeModal();
       }
     },
     async updateMovie(values, resetForm) {
@@ -333,7 +333,7 @@ export default {
       } catch {
       } finally {
         resetForm();
-        this.toggleModalStateDispatche({ val: false });
+        this.closeModal();
         localStorage.removeItem('movieToBeEdit');
         this.$router.push(`/details/${this.newMovie.id}`);
       }
