@@ -12,7 +12,7 @@
       @click="toggleModalStateDispatche({ val: true })"
       text="Add Movie"
       variant="flat"
-      :height="40"
+      :height="50"
     />
     <v-icon
       v-else

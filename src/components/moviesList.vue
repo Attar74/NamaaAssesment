@@ -14,7 +14,7 @@
           :key="movie.id"
           cols="12"
           md="6"
-          lg="4"
+          lg="3"
         >
           <movieCard :movie="movie" class="mx-2" />
         </v-col>
