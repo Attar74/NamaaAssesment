@@ -5,7 +5,3 @@
 .transition--all {
   transition: all ease-in-out 0.5s;
 }
-
-.min-height-150 {
-  min-height: 150;
-}

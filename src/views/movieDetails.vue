@@ -12,7 +12,7 @@
                 :src="movie?.poster?.length ? movie.poster : defaultPoster"
                 class="transition--all cursor-pointer"
                 v-bind="props"
-                :class="isHovering ? 'scale-1' : ''"
+                :class="{ 'scale-1': isHovering }"
               />
             </template>
           </v-hover>
@@ -42,18 +42,24 @@
                   class="font-weight-medium my-auto"
                 >
                   {{
-                    movie?.title.length > 20
-                      ? `${movie?.title.slice(0, 20)}...`
+                    movie?.title.length > 18
+                      ? `${movie?.title.slice(0, 18)}...`
                       : movie?.title
                   }}
                 </p>
               </div>
-              <v-btn
-                color="#34495E"
-                density="default"
-                icon="mdi-pencil-outline"
-                @click="editMovieDetails"
-              />
+              <v-hover>
+                <template v-slot:default="{ isHovering, props }">
+                  <v-btn
+                    color="#34495E"
+                    density="default"
+                    icon="mdi-pencil-outline"
+                    @click="editMovieDetails"
+                    v-bind="props"
+                    :class="{ 'scale-1': isHovering }"
+                  />
+                </template>
+              </v-hover>
             </div>
             <div
               class="d-flex my-5 px-8"
@@ -98,7 +104,7 @@
 
 <script>
 import { RouterLink } from 'vue-router';
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'movieDetails',
@@ -110,7 +116,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['moviesList', 'modalStateGetter']),
+    ...mapGetters(['moviesList']),
     actorsList() {
       return this.movie?.actors ?? [];
     },
@@ -118,15 +124,9 @@ export default {
       return this.$vuetify?.display?.smAndDown;
     },
   },
-  watch: {
-    modalStateGetter(val) {
-      if (!val) this.getMovieDetails();
-    },
-  },
   methods: {
-    ...mapActions(['toggleModalStateDispatche']),
     editMovieDetails() {
-      this.toggleModalStateDispatche({ val: true, movie: this.movie });
+      this.$router.push(`/editMovie/${this.movie.id}`);
     },
     getMovieDetails() {
       this.movie = this.moviesList.find((movie) => {

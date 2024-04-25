@@ -5,33 +5,31 @@
         <p class="text-h2 font-weight-bold my-5">Movies</p>
       </RouterLink>
     </v-app-bar-title>
-    <v-btn
-      v-if="!smAndDown"
-      class="mt-3 px-8 mr-8 text-h5"
-      color="#34495E"
-      @click="toggleModalStateDispatche({ val: true })"
-      text="Add Movie"
-      variant="flat"
-      :height="50"
-    />
-    <v-btn v-else>
-      <v-icon @click="toggleModalStateDispatche({ val: true })" size="50">
-        mdi-plus-circle-outline
-      </v-icon>
-    </v-btn>
+    <RouterLink to="/addMovie" class="text-white" v-if="isAddAction">
+      <v-btn
+        v-if="!smAndDown"
+        class="mt-3 px-8 mr-8 text-h5"
+        color="#34495E"
+        text="Add Movie"
+        variant="flat"
+        :height="50"
+      />
+      <v-btn v-else>
+        <v-icon size="50"> mdi-plus-circle-outline </v-icon>
+      </v-btn>
+    </RouterLink>
   </v-app-bar>
 </template>
 
 <script>
-import { mapActions } from 'vuex';
 export default {
   name: 'appHeader',
-  methods: {
-    ...mapActions(['toggleModalStateDispatche']),
-  },
   computed: {
     smAndDown() {
       return this.$vuetify?.display?.smAndDown;
+    },
+    isAddAction() {
+      return this.$route.meta.isAddAction;
     },
   },
 };

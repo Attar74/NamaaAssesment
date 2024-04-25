@@ -1,6 +1,13 @@
 <template>
-  <v-dialog max-width="750" persistent v-model="dialog">
-    <v-card :title="isEditMood ? 'Update Movie Details' : 'Add New Movie'">
+  <v-container>
+    <v-card
+      flat
+      variant="outlined"
+      :title="isEditMood ? 'Update Movie Details' : 'Add New Movie'"
+      class="mx-auto"
+      max-width="900px"
+      color="#41B883"
+    >
       <Form ref="form" @submit="handleAddUpdateMovie">
         <v-divider />
         <v-card-text class="px-6 py-5">
@@ -196,13 +203,6 @@
 
         <v-divider />
         <v-card-actions class="pa-5">
-          <v-btn
-            class="px-8"
-            color="grey"
-            variant="flat"
-            text="Close"
-            @click="closeModal"
-          />
           <v-spacer />
           <v-btn
             type="submit"
@@ -215,7 +215,7 @@
         </v-card-actions>
       </Form>
     </v-card>
-  </v-dialog>
+  </v-container>
 </template>
 
 <script>
@@ -223,7 +223,7 @@ import { Form, Field, ErrorMessage } from 'vee-validate';
 import { mapActions, mapGetters } from 'vuex';
 
 export default {
-  name: 'addEditMovie',
+  name: 'addMovie',
   components: {
     Form,
     Field,
@@ -260,15 +260,23 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['modalStateGetter', 'movieToBeEditedGetters']),
+    ...mapGetters(['moviesList']),
     isEditMood() {
-      return !!(this.movieToBeEditedGetters.id > -1);
+      return !!(this.$route.name == 'editMovie');
     },
     smAndDown() {
       return this.$vuetify?.display?.smAndDown;
     },
   },
+  created() {
+    this.handlePopulateMovieDatat();
+  },
   watch: {
+    '$route.name': {
+      handler(val) {
+        val === 'addMovie' && location.reload();
+      },
+    },
     modalStateGetter(val) {
       this.dialog = val;
       this.newMovie = Object.assign({}, this.movieToBeEditedGetters);
@@ -276,18 +284,27 @@ export default {
     },
   },
   methods: {
-    ...mapActions([
-      'addNewMovieDispatche',
-      'toggleModalStateDispatche',
-      'updateMovieDispatche',
-    ]),
+    ...mapActions(['addNewMovieDispatche', 'updateMovieDispatche']),
+    handlePopulateMovieDatat() {
+      if (this.isEditMood) {
+        this.newMovie = this.moviesList.find((movie) => {
+          return this.$route?.params?.id == movie.id;
+        }) ?? {
+          id: -1,
+          poster: '',
+          title: '',
+          year: '',
+          actors: [],
+        };
+        this.actors = [...this.newMovie?.actors];
+        if (this.newMovie?.id === -1) {
+          this.$router.push('/404-error');
+        }
+      }
+    },
     discardActorChanges() {
       this.newActor = {};
       this.EditActorMood = this.addActorForm = false;
-    },
-    closeModal() {
-      this.toggleModalStateDispatche({ val: false });
-      this.resetActorForm();
     },
     resetActorForm() {
       this.newActor = {};
@@ -346,6 +363,8 @@ export default {
         actors: [newActor, ...this.newMovie.actors],
       };
       resetForm();
+      this.resetActorForm();
+      this.addActorForm = false;
     },
     handleAddUpdateMovie(value, { resetForm }) {
       return this.isEditMood
@@ -366,7 +385,7 @@ export default {
       } catch {
       } finally {
         resetForm();
-        this.closeModal();
+        this.$router.push('/');
       }
     },
     async updateMovie(values, resetForm) {
@@ -381,7 +400,6 @@ export default {
       } catch {
       } finally {
         resetForm();
-        this.closeModal();
         this.$router.push(`/details/${this.newMovie.id}`);
       }
     },

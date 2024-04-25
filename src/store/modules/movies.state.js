@@ -331,8 +331,6 @@ const movieModule = {
             ],
           },
         ],
-    modalState: false,
-    movieToBeEdited: {},
   },
   mutations: {
     addNewMovie(state, newMovie) {
@@ -348,12 +346,6 @@ const movieModule = {
         localStorage.setItem('movies', JSON.stringify(state.movies));
       } catch {}
     },
-    toggleModalState(state, val) {
-      state.modalState = val;
-    },
-    setMovieToBeEdited(state, val) {
-      state.movieToBeEdited = val;
-    },
   },
   actions: {
     addNewMovieDispatche(context, newMovie) {
@@ -361,22 +353,6 @@ const movieModule = {
     },
     updateMovieDispatche(context, updatedMovie) {
       context.commit('updateMovie', updatedMovie);
-    },
-    toggleModalStateDispatche(
-      context,
-      {
-        val,
-        movie = {
-          id: -1,
-          poster: '',
-          title: '',
-          year: '',
-          actors: [],
-        },
-      }
-    ) {
-      context.commit('setMovieToBeEdited', movie);
-      context.commit('toggleModalState', val);
     },
   },
   getters: {
