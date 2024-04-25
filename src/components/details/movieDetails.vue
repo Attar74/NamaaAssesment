@@ -8,11 +8,8 @@
             <template v-slot:default="{ isHovering, props }">
               <v-img
                 contain
-                :src="
-                  movie?.poster?.length
-                    ? movie.poster
-                    : 'https://i0.wp.com/rollingfilmfestival.com/wp-content/uploads/2021/01/no-poster-available.png?resize=1080%2C1526&ssl=1'
-                "
+                :lazy-src="movie?.poster?.length ? movie.poster : defaultPoster"
+                :src="movie?.poster?.length ? movie.poster : defaultPoster"
                 class="transition--all cursor-pointer"
                 v-bind="props"
                 :class="isHovering ? 'scale-1' : ''"
@@ -108,6 +105,8 @@ export default {
   data() {
     return {
       movie: {},
+      defaultPoster:
+        'https://i0.wp.com/rollingfilmfestival.com/wp-content/uploads/2021/01/no-poster-available.png?resize=1080%2C1526&ssl=1',
     };
   },
   computed: {

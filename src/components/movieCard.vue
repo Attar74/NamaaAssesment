@@ -11,11 +11,8 @@
           <v-img
             :aspect-ratio="4 / 6"
             contain
-            :src="
-              movie?.poster?.length
-                ? movie.poster
-                : 'https://i0.wp.com/rollingfilmfestival.com/wp-content/uploads/2021/01/no-poster-available.png?resize=1080%2C1526&ssl=1'
-            "
+            :lazy-src="movie?.poster?.length ? movie.poster : defaultPoster"
+            :src="movie?.poster?.length ? movie.poster : defaultPoster"
             class="transition--all"
             v-bind="props"
             :class="isHovering ? 'scale-1' : ''"
@@ -66,6 +63,12 @@ export default {
         return {};
       },
     },
+  },
+  data() {
+    return {
+      defaultPoster:
+        'https://i0.wp.com/rollingfilmfestival.com/wp-content/uploads/2021/01/no-poster-available.png?resize=1080%2C1526&ssl=1',
+    };
   },
   methods: {
     routeToDetails() {

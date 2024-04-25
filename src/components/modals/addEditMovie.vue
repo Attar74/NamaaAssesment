@@ -11,7 +11,7 @@
                 :rules="validateText"
                 v-model="newMovie.title"
                 placeholder="Movie Title*"
-                class="border-md rounded pa-1 border-primary text-sm w-100"
+                class="border-md rounded pa-1 border-primary text-sm w-100 py-2"
               />
               <ErrorMessage name="title" class="text-error" />
             </v-col>
@@ -22,7 +22,7 @@
                 :rules="validateMovieYear"
                 v-model="newMovie.year"
                 placeholder="Movie Year*"
-                class="border-md rounded pa-1 border-primary text-sm w-100"
+                class="border-md rounded pa-1 border-primary text-sm w-100 py-2"
               />
               <ErrorMessage name="year" class="text-error" />
             </v-col>
@@ -33,7 +33,7 @@
                 as="textarea"
                 v-model="newMovie.description"
                 placeholder="Movie Description"
-                class="border-md rounded pa-1 border-primary text-sm w-100"
+                class="border-md rounded pa-1 border-primary text-sm w-100 py-2"
               />
             </v-col>
           </v-row>
@@ -93,7 +93,13 @@
             </v-icon>
           </v-btn>
           <v-expand-transition mode="ease-in-out">
-            <v-card v-if="addActorForm" flat variant="outlined" class="pa-2">
+            <v-card
+              v-if="addActorForm"
+              flat
+              variant="outlined"
+              class="pa-2"
+              color="#41B883"
+            >
               <Form
                 v-if="addActorForm"
                 ref="ActorForm"
@@ -110,7 +116,7 @@
                       :rules="validateText"
                       v-model="newActor.name"
                       placeholder="Actor name*"
-                      class="border-md rounded pa-1 border-primary text-sm w-100"
+                      class="border-md rounded pa-1 border-primary text-sm w-100 py-2"
                     />
                     <ErrorMessage name="actorName" class="text-error" />
                   </v-col>
@@ -120,7 +126,7 @@
                       :rules="validateAge"
                       v-model="newActor.age"
                       placeholder="Actor Age*"
-                      class="border-md rounded pa-1 border-primary text-sm w-100"
+                      class="border-md rounded pa-1 border-primary text-sm w-100 py-2"
                     />
                     <ErrorMessage name="actorAge" class="text-error" />
                   </v-col>
@@ -130,7 +136,7 @@
                       placeholder="DD/MM/YYYY*"
                       name="actorDate"
                       :rules="validateDate"
-                      class="border-md rounded pa-1 border-primary text-sm w-100"
+                      class="border-md rounded pa-1 border-primary text-sm w-100 py-2"
                     />
                     <ErrorMessage name="actorDate" class="text-error" />
                   </v-col>
@@ -140,7 +146,7 @@
                       :rules="validateText"
                       v-model="newActor.role"
                       placeholder="Actor Role*"
-                      class="border-md rounded pa-1 border-primary text-sm w-100"
+                      class="border-md rounded pa-1 border-primary text-sm w-100 py-2"
                       as="select"
                     >
                       <option value="" disabled>Actor Role*</option>

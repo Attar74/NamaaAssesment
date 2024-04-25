@@ -4,7 +4,7 @@
       @filterChange="filterChange"
       :isActiveFilter="isActiveFilter"
     />
-    <v-divider class="mt-10 mb-5" />
+    <v-divider class="mb-5" />
     <v-layout>
       <v-row v-if="pageLoading" class="mx-5">
         <v-col v-for="i in 9" :key="i" cols="12" md="6" lg="4">
