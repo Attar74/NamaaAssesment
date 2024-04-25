@@ -1,0 +1,145 @@
+<template>
+  <v-layout class="mx-5">
+    <v-row>
+      <v-col cols="0" sm="3" md="4" lg="1" />
+      <v-col cols="12" sm="6" md="4" lg="3">
+        <v-card class="mb-5">
+          <v-hover>
+            <template v-slot:default="{ isHovering, props }">
+              <v-img
+                contain
+                :src="
+                  movie?.poster?.length
+                    ? movie.poster
+                    : 'https://i0.wp.com/rollingfilmfestival.com/wp-content/uploads/2021/01/no-poster-available.png?resize=1080%2C1526&ssl=1'
+                "
+                class="transition--all cursor-pointer"
+                v-bind="props"
+                :class="isHovering ? 'scale-1' : ''"
+              />
+            </template>
+          </v-hover>
+        </v-card>
+      </v-col>
+      <v-col cols="12" md="12" lg="7">
+        <v-card class="py-5">
+          <div>
+            <div class="d-flex justify-space-between">
+              <div class="d-flex">
+                <v-hover>
+                  <template v-slot:default="{ isHovering, props }">
+                    <RouterLink to="/" class="my-auto text-black">
+                      <v-icon
+                        v-bind="props"
+                        :class="isHovering ? 'scale-1' : ''"
+                        :size="smAndDown ? '25' : '45'"
+                        class="mx-4 cursor-pointer transition--all"
+                      >
+                        mdi-arrow-left
+                      </v-icon>
+                    </RouterLink>
+                  </template>
+                </v-hover>
+                <p
+                  :class="smAndDown ? 'text-sm' : 'text-h2'"
+                  class="font-weight-medium my-auto"
+                >
+                  {{
+                    movie?.title.length > 20
+                      ? `${movie?.title.slice(0, 20)}...`
+                      : movie?.title
+                  }}
+                </p>
+              </div>
+              <v-btn
+                class="mt-3 mr-8"
+                :class="smAndDown ? 'px-0' : 'px-5'"
+                color="#34495E"
+                @click="editMovieDetails"
+                :loading="btnLoading"
+              >
+                {{ smAndDown ? 'Edit' : 'Edit details' }}
+              </v-btn>
+            </div>
+            <div
+              class="d-flex my-5 px-8"
+              :class="smAndDown ? 'text-sm' : 'text-h4'"
+            >
+              <p class="mr-2">Year:</p>
+              <p>{{ movie?.year }}</p>
+            </div>
+            <div
+              class="d-flex my-5 px-8"
+              :class="smAndDown ? 'text-sm' : 'text-h5'"
+            >
+              <p class="mr-2">Actors:</p>
+              <template v-if="actorsList.length">
+                <p v-for="actor in actorsList" :key="actor.id">
+                  <span
+                    :class="smAndDown ? 'text-sm' : 'text-h5'"
+                    class="px-2 py-1 mx-1 bg-teal-darken-1 rounded"
+                    >{{ actor?.name }}</span
+                  >
+                </p>
+              </template>
+              <p v-else>There are no added actors</p>
+            </div>
+            <div class="d-flex my-3 px-8" v-if="movie?.description">
+              <p class="mr-2">Description:</p>
+              <p>
+                {{ movie.description }}
+              </p>
+            </div>
+          </div>
+        </v-card>
+      </v-col>
+      <v-col cols="0" sm="3" md="4" lg="1" />
+    </v-row>
+  </v-layout>
+</template>
+
+<script>
+import { RouterLink } from 'vue-router';
+import { mapGetters, mapActions } from 'vuex';
+
+export default {
+  name: 'movieDetails',
+  data() {
+    return {
+      movie: {},
+      btnLoading: false,
+    };
+  },
+  computed: {
+    ...mapGetters(['moviesList', 'modalStateGetter']),
+    actorsList() {
+      return this.movie?.actors ?? [];
+    },
+    smAndDown() {
+      return this.$vuetify?.display?.smAndDown;
+    },
+  },
+  watch: {
+    modalStateGetter(val) {
+      if (!val) this.getMovieDetails();
+    },
+  },
+  methods: {
+    ...mapActions(['toggleModalStateDispatche']),
+    editMovieDetails() {
+      this.toggleModalStateDispatche({ val: true, movie: this.movie });
+    },
+    getMovieDetails() {
+      this.movie = this.moviesList.find((movie) => {
+        return movie.id == this.$route.params?.id;
+      });
+      if (!this.movie) {
+        this.$router.push('/');
+      }
+    },
+  },
+  created() {
+    this.getMovieDetails();
+  },
+};
+</script>
