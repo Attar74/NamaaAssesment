@@ -382,7 +382,6 @@ export default {
       } finally {
         resetForm();
         this.closeModal();
-        localStorage.removeItem('movieToBeEdit');
         this.$router.push(`/details/${this.newMovie.id}`);
       }
     },

@@ -38,8 +38,8 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import movieCard from './movieCard.vue';
-import moviesFilters from './moviesFilters.vue';
+import movieCard from '../components/movieCard.vue';
+import moviesFilters from '../components/moviesFilters.vue';
 
 export default {
   name: 'moviesList',
