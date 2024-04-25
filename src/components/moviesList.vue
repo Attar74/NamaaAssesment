@@ -1,6 +1,9 @@
 <template>
   <v-container class="pa-0">
-    <moviesFilters @filterChange="filterChange" />
+    <moviesFilters
+      @filterChange="filterChange"
+      :isActiveFilter="isActiveFilter"
+    />
     <v-divider class="mt-10 mb-5" />
     <v-layout>
       <v-row v-if="pageLoading" class="mx-5">
@@ -23,7 +26,7 @@
         <v-card flat class="d-flex mx-auto" height="400px">
           <p
             :class="smAndDown ? 'text-h4' : 'text-h1'"
-            class="text-h1 text-center my-auto my-auto"
+            class="text-h1 text-center mx-1 my-auto"
           >
             oops..!There is no movies available...
           </p>
@@ -63,8 +66,8 @@ export default {
           });
     },
     isActiveFilter() {
-      return Object.keys(this.filters).some((val) => {
-        return val.length;
+      return Object.values(this.filters).some((val) => {
+        return val?.length;
       });
     },
   },
@@ -80,11 +83,13 @@ export default {
     isTitleInclude(key, value, movieProp) {
       switch (key) {
         case 'title':
-          return value.length ? !!movieProp.includes(value) : true;
+          return value?.length
+            ? !!movieProp.toLowerCase().includes(value.toLowerCase())
+            : true;
         case 'year':
-          return value.length ? !!(value == movieProp) : true;
+          return value?.length ? !!(value == movieProp) : true;
         case 'actors':
-          return value.length ? !!(Number(value) === movieProp.length) : true;
+          return value?.length ? !!(Number(value) === movieProp?.length) : true;
       }
     },
   },

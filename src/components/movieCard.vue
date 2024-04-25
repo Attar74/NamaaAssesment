@@ -25,7 +25,7 @@
     </v-card>
     <v-card class="mx-auto mb-5" max-width="344">
       <v-card-text>
-        <p class="text-h4 text-truncate">{{ movie.title }}</p>
+        <p class="text-h4 text-truncate font-weight-bold">{{ movie.title }}</p>
 
         <div class="d-flex justify-space-between mt-3">
           <div v-if="movie?.year">
@@ -35,10 +35,10 @@
             </div>
           </div>
 
-          <div v-if="movie?.actors?.length">
+          <div>
             <div class="text-sm text-grey">actors</div>
             <div class="text-h6 text-center">
-              {{ movie.actors.length ?? '' }}
+              {{ movie.actors.length ?? 0 }}
             </div>
           </div>
         </div>

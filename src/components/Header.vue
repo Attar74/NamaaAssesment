@@ -14,14 +14,11 @@
       variant="flat"
       :height="50"
     />
-    <v-icon
-      v-else
-      @click="toggleModalStateDispatche({ val: true })"
-      class="mt-3 px-5 mr-8"
-      size="50"
-    >
-      mdi-plus
-    </v-icon>
+    <v-btn v-else>
+      <v-icon @click="toggleModalStateDispatche({ val: true })" size="50">
+        mdi-plus-circle-outline
+      </v-icon>
+    </v-btn>
   </v-app-bar>
 </template>
 

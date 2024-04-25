@@ -1,11 +1,11 @@
 <template>
-  <v-dialog max-width="550" persistent v-model="dialog">
-    <v-card title="Add New Movie">
+  <v-dialog max-width="750" persistent v-model="dialog">
+    <v-card :title="isEditMood ? 'Update Movie Details' : 'Add New Movie'">
       <Form ref="form" @submit="handleAddUpdateMovie">
         <v-divider />
         <v-card-text class="px-6 py-5">
           <v-row>
-            <v-col cols="12" class="pb-1">
+            <v-col cols="12" sm="6" class="pb-1">
               <Field
                 name="title"
                 :rules="validateText"
@@ -13,12 +13,10 @@
                 placeholder="Movie Title*"
                 class="border-md rounded pa-1 border-primary text-sm w-100"
               />
-            </v-col>
-            <v-col cols="12" class="py-0">
               <ErrorMessage name="title" class="text-error" />
             </v-col>
 
-            <v-col cols="12" class="pb-1">
+            <v-col cols="12" sm="6" class="pb-1">
               <Field
                 name="year"
                 :rules="validateMovieYear"
@@ -26,14 +24,13 @@
                 placeholder="Movie Year*"
                 class="border-md rounded pa-1 border-primary text-sm w-100"
               />
-            </v-col>
-            <v-col cols="12" class="py-0">
               <ErrorMessage name="year" class="text-error" />
             </v-col>
 
             <v-col cols="12" class="pb-1">
               <Field
                 name="description"
+                as="textarea"
                 v-model="newMovie.description"
                 placeholder="Movie Description"
                 class="border-md rounded pa-1 border-primary text-sm w-100"
@@ -47,7 +44,7 @@
             </p>
             <v-card
               flat
-              class="overflow-auto"
+              class="overflow-auto mt-2"
               :height="actors.length > 3 ? 200 : auto"
             >
               <v-data-table-virtual :items="actors" :headers="headers">
@@ -61,99 +58,138 @@
                   </p>
                 </template>
                 <template v-slot:item.actions="{ item }">
-                  <v-icon @click="editActor(item)" color="warning" class="mr-5">
-                    mdi-pencil-outline
-                  </v-icon>
-                  <v-icon @click="discardActor(item)" color="error">
-                    mdi-trash-can-outline
-                  </v-icon>
+                  <div class="d-flex justify-space-evenly">
+                    <v-btn
+                      class="mr-1"
+                      color="#34495E"
+                      density="default"
+                      icon="mdi-pencil-outline"
+                      @click="editActor(item)"
+                      size="x-small"
+                    />
+                    <v-btn
+                      color="error"
+                      density="default"
+                      icon="mdi-trash-can-outline"
+                      @click="deleteActor(item)"
+                      size="x-small"
+                    />
+                  </div>
                 </template>
               </v-data-table-virtual>
             </v-card>
           </div>
           <v-divider class="my-6" v-if="actors.length" />
-          <v-row>
-            <p class="text-h6 ml-3 mb-1">Add New Actor*</p>
-            <Form ref="ActorForm" @submit="handleAddUpdateActor" class="w-100">
-              <v-row class="mx-0">
-                <v-col cols="12" md="6" class="pb-1">
-                  <Field
-                    name="actorName"
-                    :rules="validateText"
-                    v-model="newActor.name"
-                    placeholder="Actor name*"
-                    class="border-md rounded pa-1 border-primary text-sm w-100"
-                  />
-                  <ErrorMessage name="actorName" class="text-error" />
-                </v-col>
-                <v-col ccols="12" md="6" class="pb-1">
-                  <Field
-                    name="actorAge"
-                    :rules="validateAge"
-                    v-model="newActor.age"
-                    placeholder="Actor Age*"
-                    class="border-md rounded pa-1 border-primary text-sm w-100"
-                  />
-                  <ErrorMessage name="actorAge" class="text-error" />
-                </v-col>
-                <v-col cols="12" md="6" class="pb-1">
-                  <Field
-                    v-model="newActor.joinedDate"
-                    placeholder="DD/MM/YYYY*"
-                    name="actorDate"
-                    :rules="validateDate"
-                    class="border-md rounded pa-1 border-primary text-sm w-100"
-                  />
-                  <ErrorMessage name="actorDate" class="text-error" />
-                </v-col>
-                <v-col cols="12" md="6" class="pb-1">
-                  <Field
-                    name="actorRole"
-                    :rules="validateText"
-                    v-model="newActor.role"
-                    placeholder="Actor Role*"
-                    class="border-md rounded pa-1 border-primary text-sm w-100"
-                    as="select"
-                  >
-                    <option value="" disabled>Actor Role*</option>
-                    <option value="Background role">Background role</option>
-                    <option value="Cameo">Cameo</option>
-                    <option value="Recurring character">
-                      Recurring character
-                    </option>
-                    <option value="Side character">Side character</option>
-                    <option value="Series regular">Series regular</option>
-                  </Field>
-                  <ErrorMessage name="actorRole" class="text-error" />
-                </v-col>
-              </v-row>
-              <v-row class="mx-4 mb-1 my-0">
-                <v-spacer></v-spacer>
-                <div class="d-flex text-success pb-0 cursor-pointer mt-5">
-                  <v-btn
-                    v-if="!EditActorMood"
-                    variant="text"
-                    type="submit"
-                    class="px-0"
-                  >
-                    <p class="text-h6 text-decoration-underline">
-                      {{ actors.length ? 'Add Another Actor' : 'Add Actor' }}
-                    </p>
-                    <v-icon class="my-auto"> mdi-plus </v-icon>
-                  </v-btn>
-                  <v-btn v-else type="submit" class="px-0" color="success">
-                    <p class="text-h6 px-5">Update Actor</p>
-                  </v-btn>
+          <v-btn
+            class="px-3 mb-3"
+            color="#41b883"
+            variant="flat"
+            text="Add Actor Form"
+            @click="addActorForm = !addActorForm"
+          >
+            <p>Add Actor Form</p>
+            <v-icon>
+              {{ addActorForm ? 'mdi-chevron-up' : 'mdi-chevron-down' }}
+            </v-icon>
+          </v-btn>
+          <v-expand-transition mode="ease-in-out">
+            <v-card v-if="addActorForm" flat variant="outlined" class="pa-2">
+              <Form
+                v-if="addActorForm"
+                ref="ActorForm"
+                @submit="handleAddUpdateActor"
+                class="w-100"
+              >
+                <div class="d-flex justify-space-between">
+                  <p class="text-h6 ml-3 mb-1">Add New Actor*</p>
                 </div>
-                <v-spacer></v-spacer>
-              </v-row>
-            </Form>
-          </v-row>
+                <v-row class="mx-0">
+                  <v-col cols="12" sm="6" class="pb-1">
+                    <Field
+                      name="actorName"
+                      :rules="validateText"
+                      v-model="newActor.name"
+                      placeholder="Actor name*"
+                      class="border-md rounded pa-1 border-primary text-sm w-100"
+                    />
+                    <ErrorMessage name="actorName" class="text-error" />
+                  </v-col>
+                  <v-col ccols="12" sm="6" class="pb-1">
+                    <Field
+                      name="actorAge"
+                      :rules="validateAge"
+                      v-model="newActor.age"
+                      placeholder="Actor Age*"
+                      class="border-md rounded pa-1 border-primary text-sm w-100"
+                    />
+                    <ErrorMessage name="actorAge" class="text-error" />
+                  </v-col>
+                  <v-col cols="12" sm="6" class="pb-1">
+                    <Field
+                      v-model="newActor.joinedDate"
+                      placeholder="DD/MM/YYYY*"
+                      name="actorDate"
+                      :rules="validateDate"
+                      class="border-md rounded pa-1 border-primary text-sm w-100"
+                    />
+                    <ErrorMessage name="actorDate" class="text-error" />
+                  </v-col>
+                  <v-col cols="12" sm="6" class="pb-1">
+                    <Field
+                      name="actorRole"
+                      :rules="validateText"
+                      v-model="newActor.role"
+                      placeholder="Actor Role*"
+                      class="border-md rounded pa-1 border-primary text-sm w-100"
+                      as="select"
+                    >
+                      <option value="" disabled>Actor Role*</option>
+                      <option value="Background role">Background role</option>
+                      <option value="Cameo">Cameo</option>
+                      <option value="Recurring character">
+                        Recurring character
+                      </option>
+                      <option value="Side character">Side character</option>
+                      <option value="Series regular">Series regular</option>
+                    </Field>
+                    <ErrorMessage name="actorRole" class="text-error" />
+                  </v-col>
+                </v-row>
+                <v-row class="mx-4 mb-1 my-0">
+                  <v-spacer></v-spacer>
+                  <div class="d-flex pb-0 cursor-pointer mt-5">
+                    <v-btn
+                      class="px-3 mx-1"
+                      color="grey"
+                      variant="flat"
+                      @click="discardActorChanges"
+                      text="Discard"
+                    />
+                    <v-btn
+                      v-if="!EditActorMood"
+                      type="submit"
+                      class="px-3"
+                      color="#41b883"
+                      variant="flat"
+                      text="Add Actor"
+                    />
+                    <v-btn
+                      v-else
+                      type="submit"
+                      class="px-3"
+                      color="#41b883"
+                      variant="flat"
+                      text="Update Actor"
+                    />
+                  </div>
+                </v-row>
+              </Form>
+            </v-card>
+          </v-expand-transition>
         </v-card-text>
 
         <v-divider />
-        <v-card-actions>
-          <v-spacer v-if="!smAndDown" />
+        <v-card-actions class="pa-5">
           <v-btn
             class="px-8"
             color="grey"
@@ -161,13 +197,14 @@
             text="Close"
             @click="closeModal"
           />
-          <v-spacer v-if="smAndDown" />
+          <v-spacer />
           <v-btn
             type="submit"
             class="px-8"
             color="#41b883"
             :text="isEditMood ? 'Update' : 'Add Movie'"
             variant="flat"
+            :disabled="!actors.length"
           />
         </v-card-actions>
       </Form>
@@ -188,12 +225,13 @@ export default {
   },
   data() {
     return {
+      addActorForm: false,
       isValid: false,
       newMovie: {
         actors: [],
       },
       headers: [
-        { title: 'name', align: 'center', key: 'name', sortable: false },
+        { title: 'name', align: 'center', key: 'name', sortable: true },
         { title: 'Age', align: 'center', key: 'age', sortable: false },
         {
           title: 'Joined date',
@@ -237,19 +275,23 @@ export default {
       'toggleModalStateDispatche',
       'updateMovieDispatche',
     ]),
+    discardActorChanges() {
+      this.newActor = {};
+      this.EditActorMood = this.addActorForm = false;
+    },
     closeModal() {
       this.toggleModalStateDispatche({ val: false });
+      this.resetActorForm();
     },
     resetActorForm() {
       this.newActor = {};
-      this.newMovie = {};
-      this.EditActorMood = false;
+      this.EditActorMood = this.addActorForm = false;
     },
     editActor(actor) {
-      this.EditActorMood = true;
+      this.EditActorMood = this.addActorForm = true;
       this.newActor = { ...actor };
     },
-    discardActor(deletedActor) {
+    deleteActor(deletedActor) {
       this.actors = this.actors.filter((actor) => {
         return actor.id !== deletedActor.id;
       });
@@ -292,7 +334,7 @@ export default {
         joinedDate: actorDate,
         age: actorAge,
       };
-      this.actors.push(newActor);
+      this.actors.unshift(newActor);
       this.newMovie = {
         ...this.newMovie,
         actors: [newActor, ...this.newMovie.actors],
