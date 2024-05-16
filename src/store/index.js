@@ -1,10 +1,10 @@
 import { createStore } from 'vuex';
 
-import movieModule from './modules/movies.state';
+import ProductModule from './modules/products.state';
 
 const store = createStore({
   modules: {
-    movieModule,
+    ProductModule,
   },
 });
 

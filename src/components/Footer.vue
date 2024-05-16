@@ -3,7 +3,7 @@
     <v-row justify="center" no-gutters>
       <v-col class="text-center pt-2" cols="12">
         All right reserved &#169 {{ new Date().getFullYear() }} —
-        <strong>Movies</strong>
+        <strong>Vimi</strong>
       </v-col>
     </v-row>
   </v-footer>

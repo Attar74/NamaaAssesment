@@ -11,8 +11,8 @@
           <v-img
             :aspect-ratio="4 / 6"
             contain
-            :lazy-src="movie?.poster?.length ? movie.poster : defaultPoster"
-            :src="movie?.poster?.length ? movie.poster : defaultPoster"
+            :lazy-src="Product?.poster?.length ? Product.poster : defaultPoster"
+            :src="Product?.poster?.length ? Product.poster : defaultPoster"
             class="transition--all"
             v-bind="props"
             :class="isHovering ? 'scale-1' : ''"
@@ -22,20 +22,22 @@
     </v-card>
     <v-card class="mx-auto mb-5" max-width="344">
       <v-card-text>
-        <p class="text-h4 text-truncate font-weight-bold">{{ movie.title }}</p>
+        <p class="text-h4 text-truncate font-weight-bold">
+          {{ Product.title }}
+        </p>
 
         <div class="d-flex justify-space-between mt-3">
-          <div v-if="movie?.year">
+          <div v-if="Product?.year">
             <div class="text-sm text-grey">year</div>
             <div class="text-h6 text-center text-decoration-none">
-              {{ movie.year ?? '' }}
+              {{ Product.year ?? '' }}
             </div>
           </div>
 
           <div>
             <div class="text-sm text-grey">actors</div>
             <div class="text-h6 text-center">
-              {{ movie.actors.length ?? 0 }}
+              {{ Product.actors.length ?? 0 }}
             </div>
           </div>
         </div>
@@ -56,9 +58,9 @@
 
 <script>
 export default {
-  name: 'movieCard',
+  name: 'productCard',
   props: {
-    movie: {
+    Product: {
       default() {
         return {};
       },
@@ -72,7 +74,7 @@ export default {
   },
   methods: {
     routeToDetails() {
-      this.$router.push(`/details/${this.movie.id}`);
+      this.$router.push(`/details/${this.Product.id}`);
     },
   },
 };

@@ -1,4 +1,4 @@
-const DefaultMovies = [
+const DefaultProducts = [
   {
     id: 1,
     poster:
@@ -327,4 +327,4 @@ const DefaultMovies = [
   },
 ];
 
-export default DefaultMovies;
+export default DefaultProducts;

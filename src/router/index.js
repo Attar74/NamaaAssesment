@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import movieList from '@/views/moviesList.vue';
+import ProductList from '@/views/productList.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -10,7 +10,7 @@ const router = createRouter({
       meta: {
         isAddAction: true,
       },
-      component: movieList,
+      component: ProductList,
     },
     {
       path: '/details/:id',
@@ -18,23 +18,23 @@ const router = createRouter({
       meta: {
         isAddAction: true,
       },
-      component: () => import('@/views/movieDetails.vue'),
+      component: () => import('@/views/productDetails.vue'),
     },
     {
-      path: '/addMovie',
-      name: 'addMovie',
+      path: '/addProduct',
+      name: 'addProduct',
       meta: {
         isAddAction: false,
       },
-      component: () => import('@/views/addMovie.vue'),
+      component: () => import('@/views/addProduct.vue'),
     },
     {
-      path: '/editMovie/:id',
-      name: 'editMovie',
+      path: '/editProduct/:id',
+      name: 'editProduct',
       meta: {
         isAddAction: true,
       },
-      component: () => import('@/views/addMovie.vue'),
+      component: () => import('@/views/addProduct.vue'),
     },
     {
       path: '/:PathMatch(.*)*',

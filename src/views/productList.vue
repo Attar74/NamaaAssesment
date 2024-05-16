@@ -1,6 +1,6 @@
 <template>
   <v-container class="pa-0">
-    <moviesFilters
+    <ProductsFilters
       @filterChange="filterChange"
       :isActiveFilter="isActiveFilter"
     />
@@ -11,15 +11,15 @@
           <v-skeleton-loader type="card"></v-skeleton-loader>
         </v-col>
       </v-row>
-      <v-row v-else-if="filterdMovie.length">
+      <v-row v-else-if="filterdProduct.length">
         <v-col
-          v-for="movie in filterdMovie"
-          :key="movie.id"
+          v-for="Product in filterdProduct"
+          :key="Product.id"
           cols="12"
           md="6"
           lg="3"
         >
-          <movieCard :movie="movie" class="mx-2" />
+          <productCard :Product="Product" class="mx-2" />
         </v-col>
       </v-row>
       <v-row v-else>
@@ -28,7 +28,7 @@
             :class="smAndDown ? 'text-h4' : 'text-h1'"
             class="text-h1 text-center mx-1 my-auto"
           >
-            oops..!There is no movies available...
+            oops..!There is no Products available...
           </p>
         </v-card>
       </v-row>
@@ -38,30 +38,30 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import movieCard from '../components/movieCard.vue';
-import moviesFilters from '../components/moviesFilters.vue';
+import productCard from '../components/ProductCard.vue';
+import ProductsFilters from '../components/cardFilters.vue';
 
 export default {
-  name: 'moviesList',
-  components: { movieCard, moviesFilters },
+  name: 'ProductsList',
+  components: { productCard, ProductsFilters },
   data() {
     return {
-      movies: [],
+      Products: [],
       filters: {},
       pageLoading: false,
     };
   },
   computed: {
-    ...mapGetters(['moviesList']),
+    ...mapGetters(['ProductsList']),
     smAndDown() {
       return this.$vuetify?.display?.smAndDown;
     },
-    filterdMovie() {
+    filterdProduct() {
       return !this.isActiveFilter
-        ? this.moviesList
-        : this.moviesList.filter((movie) => {
+        ? this.ProductsList
+        : this.ProductsList.filter((Product) => {
             return Object.entries(this.filters).every(([key, val]) => {
-              return this.isTitleInclude(key, val, movie[key]);
+              return this.isTitleInclude(key, val, Product[key]);
             });
           });
     },
@@ -80,16 +80,18 @@ export default {
         this.pageLoading = false;
       }, 1000);
     },
-    isTitleInclude(key, value, movieProp) {
+    isTitleInclude(key, value, ProductProp) {
       switch (key) {
         case 'title':
           return value?.length
-            ? !!movieProp.toLowerCase().includes(value.toLowerCase())
+            ? !!ProductProp.toLowerCase().includes(value.toLowerCase())
             : true;
         case 'year':
-          return value?.length ? !!(value == movieProp) : true;
+          return value?.length ? !!(value == ProductProp) : true;
         case 'actors':
-          return value?.length ? !!(Number(value) === movieProp?.length) : true;
+          return value?.length
+            ? !!(Number(value) === ProductProp?.length)
+            : true;
       }
     },
   },

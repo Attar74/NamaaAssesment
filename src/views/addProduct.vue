@@ -3,12 +3,12 @@
     <v-card
       flat
       variant="outlined"
-      :title="isEditMood ? 'Update Movie Details' : 'Add New Movie'"
+      :title="isEditMood ? 'Update Product Details' : 'Add New Product'"
       class="mx-auto"
       max-width="900px"
       color="#41B883"
     >
-      <Form ref="form" @submit="handleAddUpdateMovie">
+      <Form ref="form" @submit="handleAddUpdateProduct">
         <v-divider />
         <v-card-text class="px-6 py-5">
           <v-row>
@@ -16,8 +16,8 @@
               <Field
                 name="title"
                 :rules="validateText"
-                v-model="newMovie.title"
-                placeholder="Movie Title*"
+                v-model="newProduct.title"
+                placeholder="Product Title*"
                 class="border-md rounded pa-1 border-primary text-sm w-100 py-2"
               />
               <ErrorMessage name="title" class="text-error" />
@@ -26,9 +26,9 @@
             <v-col cols="12" sm="6" class="pb-1">
               <Field
                 name="year"
-                :rules="validateMovieYear"
-                v-model="newMovie.year"
-                placeholder="Movie Year*"
+                :rules="validateProductYear"
+                v-model="newProduct.year"
+                placeholder="Product Year*"
                 class="border-md rounded pa-1 border-primary text-sm w-100 py-2"
               />
               <ErrorMessage name="year" class="text-error" />
@@ -38,8 +38,8 @@
               <Field
                 name="description"
                 as="textarea"
-                v-model="newMovie.description"
-                placeholder="Movie Description"
+                v-model="newProduct.description"
+                placeholder="Product Description"
                 class="border-md rounded pa-1 border-primary text-sm w-100 py-2"
               />
             </v-col>
@@ -208,7 +208,7 @@
             type="submit"
             class="px-8"
             color="#41b883"
-            :text="isEditMood ? 'Update' : 'Add Movie'"
+            :text="isEditMood ? 'Update' : 'Add Product'"
             variant="flat"
             :disabled="!actors.length"
           />
@@ -223,7 +223,7 @@ import { Form, Field, ErrorMessage } from 'vee-validate';
 import { mapActions, mapGetters } from 'vuex';
 
 export default {
-  name: 'addMovie',
+  name: 'addProduct',
   components: {
     Form,
     Field,
@@ -233,7 +233,7 @@ export default {
     return {
       addActorForm: false,
       isValid: false,
-      newMovie: {
+      newProduct: {
         actors: [],
       },
       headers: [
@@ -260,35 +260,35 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['moviesList']),
+    ...mapGetters(['ProductsList']),
     isEditMood() {
-      return !!(this.$route.name == 'editMovie');
+      return !!(this.$route.name == 'editProduct');
     },
     smAndDown() {
       return this.$vuetify?.display?.smAndDown;
     },
   },
   created() {
-    this.handlePopulateMovieDatat();
+    this.handlePopulateProductDatat();
   },
   watch: {
     '$route.name': {
       handler(val) {
-        val === 'addMovie' && location.reload();
+        val === 'addProduct' && location.reload();
       },
     },
     modalStateGetter(val) {
       this.dialog = val;
-      this.newMovie = Object.assign({}, this.movieToBeEditedGetters);
-      this.actors = [...this.newMovie?.actors];
+      this.newProduct = Object.assign({}, this.ProductToBeEditedGetters);
+      this.actors = [...this.newProduct?.actors];
     },
   },
   methods: {
-    ...mapActions(['addNewMovieDispatche', 'updateMovieDispatche']),
-    handlePopulateMovieDatat() {
+    ...mapActions(['addNewProductDispatche', 'updateProductDispatche']),
+    handlePopulateProductDatat() {
       if (this.isEditMood) {
-        this.newMovie = this.moviesList.find((movie) => {
-          return this.$route?.params?.id == movie.id;
+        this.newProduct = this.ProductsList.find((Product) => {
+          return this.$route?.params?.id == Product.id;
         }) ?? {
           id: -1,
           poster: '',
@@ -296,8 +296,8 @@ export default {
           year: '',
           actors: [],
         };
-        this.actors = [...this.newMovie?.actors];
-        if (this.newMovie?.id === -1) {
+        this.actors = [...this.newProduct?.actors];
+        if (this.newProduct?.id === -1) {
           this.$router.push('/404-error');
         }
       }
@@ -318,8 +318,8 @@ export default {
       this.actors = this.actors.filter((actor) => {
         return actor.id !== deletedActor.id;
       });
-      this.newMovie = {
-        ...this.newMovie,
+      this.newProduct = {
+        ...this.newProduct,
         actors: this.actors,
       };
     },
@@ -358,22 +358,22 @@ export default {
         age: actorAge,
       };
       this.actors.unshift(newActor);
-      this.newMovie = {
-        ...this.newMovie,
-        actors: [newActor, ...this.newMovie.actors],
+      this.newProduct = {
+        ...this.newProduct,
+        actors: [newActor, ...this.newProduct.actors],
       };
       resetForm();
       this.resetActorForm();
       this.addActorForm = false;
     },
-    handleAddUpdateMovie(value, { resetForm }) {
+    handleAddUpdateProduct(value, { resetForm }) {
       return this.isEditMood
-        ? this.updateMovie(value, resetForm)
-        : this.AddMovie(value, resetForm);
+        ? this.updateProduct(value, resetForm)
+        : this.AddProduct(value, resetForm);
     },
-    async AddMovie(values, resetForm) {
+    async AddProduct(values, resetForm) {
       const { title, year, description = '' } = values;
-      const newMoviePayload = {
+      const newProductPayload = {
         id: Math.round(Math.random() * 100),
         title,
         year,
@@ -381,26 +381,26 @@ export default {
         actors: this.actors,
       };
       try {
-        await this.addNewMovieDispatche(newMoviePayload);
+        await this.addNewProductDispatche(newProductPayload);
       } catch {
       } finally {
         resetForm();
         this.$router.push('/');
       }
     },
-    async updateMovie(values, resetForm) {
-      const updatedMoviePayload = {
+    async updateProduct(values, resetForm) {
+      const updatedProductPayload = {
         ...values,
-        poster: this.newMovie?.poster ?? '',
-        id: this.newMovie.id,
+        poster: this.newProduct?.poster ?? '',
+        id: this.newProduct.id,
         actors: this.actors,
       };
       try {
-        await this.updateMovieDispatche(updatedMoviePayload);
+        await this.updateProductDispatche(updatedProductPayload);
       } catch {
       } finally {
         resetForm();
-        this.$router.push(`/details/${this.newMovie.id}`);
+        this.$router.push(`/details/${this.newProduct.id}`);
       }
     },
     validateText(value) {
@@ -419,10 +419,10 @@ export default {
 
       return true;
     },
-    validateMovieYear(value) {
+    validateProductYear(value) {
       if (!value) return '*This field is required';
       if (isNaN(Number(value)) || value < 1970 || value > 2024) {
-        return '*Movie Year Must be between 1970 - 2024';
+        return '*Product Year Must be between 1970 - 2024';
       }
 
       return true;

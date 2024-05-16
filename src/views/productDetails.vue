@@ -8,8 +8,10 @@
             <template v-slot:default="{ isHovering, props }">
               <v-img
                 contain
-                :lazy-src="movie?.poster?.length ? movie.poster : defaultPoster"
-                :src="movie?.poster?.length ? movie.poster : defaultPoster"
+                :lazy-src="
+                  Product?.poster?.length ? Product.poster : defaultPoster
+                "
+                :src="Product?.poster?.length ? Product.poster : defaultPoster"
                 class="transition--all cursor-pointer"
                 v-bind="props"
                 :class="{ 'scale-1': isHovering }"
@@ -42,9 +44,9 @@
                   class="font-weight-medium my-auto"
                 >
                   {{
-                    movie?.title.length > 18
-                      ? `${movie?.title.slice(0, 18)}...`
-                      : movie?.title
+                    Product?.title.length > 18
+                      ? `${Product?.title.slice(0, 18)}...`
+                      : Product?.title
                   }}
                 </p>
               </div>
@@ -54,7 +56,7 @@
                     color="#34495E"
                     density="default"
                     icon="mdi-pencil-outline"
-                    @click="editMovieDetails"
+                    @click="editProductDetails"
                     v-bind="props"
                     :class="{ 'scale-1': isHovering }"
                   />
@@ -66,7 +68,7 @@
               :class="smAndDown ? 'text-sm' : 'text-h4'"
             >
               <p class="mr-2 font-weight-bold">Year:</p>
-              <p>{{ movie?.year }}</p>
+              <p>{{ Product?.year }}</p>
             </div>
             <div
               class="d-flex my-5 px-8"
@@ -88,10 +90,10 @@
               </div>
               <p v-else>There are no added actors</p>
             </div>
-            <div class="d-flex my-3 px-8" v-if="movie?.description">
+            <div class="d-flex my-3 px-8" v-if="Product?.description">
               <p class="mr-2">Description:</p>
               <p>
-                {{ movie.description }}
+                {{ Product.description }}
               </p>
             </div>
           </div>
@@ -107,38 +109,38 @@ import { RouterLink } from 'vue-router';
 import { mapGetters } from 'vuex';
 
 export default {
-  name: 'movieDetails',
+  name: 'ProductDetails',
   data() {
     return {
-      movie: {},
+      Product: {},
       defaultPoster:
         'https://i0.wp.com/rollingfilmfestival.com/wp-content/uploads/2021/01/no-poster-available.png?resize=1080%2C1526&ssl=1',
     };
   },
   computed: {
-    ...mapGetters(['moviesList']),
+    ...mapGetters(['ProductsList']),
     actorsList() {
-      return this.movie?.actors ?? [];
+      return this.Product?.actors ?? [];
     },
     smAndDown() {
       return this.$vuetify?.display?.smAndDown;
     },
   },
   methods: {
-    editMovieDetails() {
-      this.$router.push(`/editMovie/${this.movie.id}`);
+    editProductDetails() {
+      this.$router.push(`/editProduct/${this.Product.id}`);
     },
-    getMovieDetails() {
-      this.movie = this.moviesList.find((movie) => {
-        return movie.id == this.$route.params?.id;
+    getProductDetails() {
+      this.Product = this.ProductsList.find((Product) => {
+        return Product.id == this.$route.params?.id;
       });
-      if (!this.movie) {
+      if (!this.Product) {
         this.$router.push('/');
       }
     },
   },
   created() {
-    this.getMovieDetails();
+    this.getProductDetails();
   },
 };
 </script>

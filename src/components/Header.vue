@@ -2,15 +2,15 @@
   <v-app-bar color="#41B883" height="80">
     <v-app-bar-title class="text-h3 overflow-auto d-flex">
       <RouterLink to="/" class="text-decoration-none text-white">
-        <p class="text-h2 font-weight-bold my-5">Movies</p>
+        <p class="text-h2 font-weight-bold my-5">Vimi</p>
       </RouterLink>
     </v-app-bar-title>
-    <RouterLink to="/addMovie" class="text-white" v-if="isAddAction">
+    <RouterLink to="/addProduct" class="text-white" v-if="isAddAction">
       <v-btn
         v-if="!smAndDown"
         class="mt-3 px-8 mr-8 text-h5"
         color="#34495E"
-        text="Add Movie"
+        text="Add Product"
         variant="flat"
         :height="50"
       />

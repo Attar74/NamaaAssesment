@@ -55,7 +55,7 @@
 import { Form, Field, ErrorMessage } from 'vee-validate';
 
 export default {
-  name: 'moviesFilters',
+  name: 'ProductsFilters',
   components: {
     Form,
     Field,
